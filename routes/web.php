@@ -1,0 +1,51 @@
+<?php
+
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\MahasiswaController;
+use App\Http\Controllers\Admin\StrukturController as AdminStrukturController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\StrukturController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/feed', [PostController::class, 'index'])->name('feed');
+    Route::get('/mahasiswa', [\App\Http\Controllers\MahasiswaController::class, 'index'])->name('mahasiswa.index');
+    Route::get('/mahasiswa/{mahasiswa}', [\App\Http\Controllers\MahasiswaController::class, 'show'])->name('mahasiswa.show');
+    Route::resource('posts', PostController::class);
+    Route::post('posts/{post}/reaction', [ReactionController::class, 'toggle'])->name('posts.reaction');
+    Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}/redirect', [NotificationController::class, 'redirect'])->name('notifications.redirect');
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::patch('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/struktur-kelas', [StrukturController::class, 'index'])->name('struktur-kelas.index');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('mahasiswa', MahasiswaController::class);
+    Route::resource('struktur', AdminStrukturController::class);
+});
+
+require __DIR__.'/auth.php';
