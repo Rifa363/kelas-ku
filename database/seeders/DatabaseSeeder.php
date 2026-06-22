@@ -9,13 +9,17 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Mahasiswa::factory()->administrator()->create([
-            'nama' => 'Administrator',
-            'nim' => '0000000000',
-            'email' => 'admin@tple006.com',
-            'password' => bcrypt('password'),
-        ]);
+        if (! Mahasiswa::where('email', 'admin@tple006.com')->exists()) {
+            Mahasiswa::factory()->administrator()->create([
+                'nama' => 'Administrator',
+                'nim' => '0000000000',
+                'email' => 'admin@tple006.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
 
-        Mahasiswa::factory(10)->create();
+        if (Mahasiswa::count() < 11) {
+            Mahasiswa::factory(10)->create();
+        }
     }
 }
