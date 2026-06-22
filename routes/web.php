@@ -12,6 +12,28 @@ use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\StrukturController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/_debug', function () {
+    $paths = [
+        public_path('build/manifest.json'),
+        public_path('build'),
+        base_path('public/build/manifest.json'),
+    ];
+    $result = [];
+    foreach ($paths as $p) {
+        $result[$p] = file_exists($p) ? 'EXISTS' : 'NOT_FOUND';
+        if (file_exists($p) && is_file($p)) {
+            $result[$p . ' (contents)'] = file_get_contents($p);
+        }
+        if (file_exists($p) && is_dir($p)) {
+            $result[$p . ' (files)'] = scandir($p);
+        }
+    }
+    $result['APP_ENV'] = app()->environment();
+    $result['base_path'] = base_path();
+    $result['public_path'] = public_path();
+    return response()->json($result);
+});
+
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dashboard');
