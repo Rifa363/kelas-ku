@@ -19,7 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (env('APP_ENV') !== 'local') {
+        if (app()->environment('production')) {
+            $hotFile = public_path('hot');
+            if (file_exists($hotFile)) {
+                @unlink($hotFile);
+            }
             URL::forceScheme('https');
         }
     }
