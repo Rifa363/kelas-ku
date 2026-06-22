@@ -53,6 +53,10 @@ class MahasiswaController extends Controller
     {
         $data = $request->validated();
 
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
         if ($request->hasFile('foto')) {
             if ($mahasiswa->foto) {
                 Storage::disk('public')->delete($mahasiswa->foto);
