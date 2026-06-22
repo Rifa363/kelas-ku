@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateMahasiswaRequest extends FormRequest
 {
@@ -14,12 +14,12 @@ class UpdateMahasiswaRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('mahasiswa');
+        $mahasiswa = $this->route('mahasiswa');
 
         return [
             'nama' => ['required', 'string', 'max:255'],
-            'nim' => ['required', 'string', 'max:20', 'unique:mahasiswa,nim,' . $id],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:mahasiswa,email,' . $id],
+            'nim' => ['required', 'string', 'max:20', Rule::unique('mahasiswa')->ignore($mahasiswa)],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('mahasiswa')->ignore($mahasiswa)],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'password' => ['sometimes', 'nullable', 'string', 'min:8'],
             'foto' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
