@@ -11,18 +11,18 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(Vite::class, function () {
-            return (new Vite)->useHotFile('');
-        });
-    }
-
-    public function boot(): void
-    {
         $hotFile = public_path('hot');
         if (file_exists($hotFile)) {
             @unlink($hotFile);
         }
 
+        $this->app->singleton(Vite::class, function ($app) {
+            return (new Vite($app))->useHotFile('');
+        });
+    }
+
+    public function boot(): void
+    {
         ViteFacade::useHotFile('');
 
         if (app()->environment('production')) {
