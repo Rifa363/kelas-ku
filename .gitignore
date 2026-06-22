@@ -10,3 +10,4 @@ Homestead.json
 Homestead.yaml
 auth.json
 .DS_Store
+/public/storage
