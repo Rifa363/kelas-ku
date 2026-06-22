@@ -5,7 +5,7 @@
         "buildCommand": "rm -f public/hot && composer install --no-dev && npm install && npm run build && php artisan storage:link"
     },
     "deploy": {
-        "startCommand": "php artisan migrate --force && php artisan queue:work --tries=3 --timeout=90 & php artisan serve --host=0.0.0.0 --port=$PORT",
+        "startCommand": "php artisan migrate --force --seed && php artisan queue:work --tries=3 --timeout=90 & php artisan serve --host=0.0.0.0 --port=$PORT",
         "healthcheckPath": "/",
         "healthcheckTimeout": 300,
         "restartPolicyType": "ON_FAILURE"
