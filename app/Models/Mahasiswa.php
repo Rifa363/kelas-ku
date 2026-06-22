@@ -46,7 +46,7 @@ class Mahasiswa extends Authenticatable
 
     public function fotoUrl(): string
     {
-        return $this->foto ? Storage::url($this->foto) : '';
+        return $this->foto ? Storage::disk('public')->url($this->foto) : '';
     }
 
     public function isAdministrator(): bool
