@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Vite;
+use App\Vite;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite as ViteFacade;
 use Illuminate\Support\ServiceProvider;
@@ -16,8 +16,8 @@ class AppServiceProvider extends ServiceProvider
             @unlink($hotFile);
         }
 
-        $this->app->singleton(Vite::class, function ($app) {
-            return (new Vite($app))->useHotFile('');
+        $this->app->singleton(\Illuminate\Foundation\Vite::class, function ($app) {
+            return new Vite($app);
         });
     }
 
