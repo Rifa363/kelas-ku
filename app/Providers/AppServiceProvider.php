@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
                 @unlink($hotFile);
             }
 
-            Vite::useHotFile(null);
+            Vite::useHotFile('');
 
             URL::forceScheme('https');
         }
