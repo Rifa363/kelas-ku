@@ -11,3 +11,4 @@ Homestead.yaml
 auth.json
 .DS_Store
 /public/storage
+/public/hot
