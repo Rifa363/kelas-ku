@@ -11,19 +11,16 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $hotFile = public_path('hot');
-        if (file_exists($hotFile)) {
-            @unlink($hotFile);
-        }
-
         $this->app->singleton(\Illuminate\Foundation\Vite::class, function ($app) {
-            return new Vite($app);
+            $vite = new Vite($app);
+            $vite->useHotFile(storage_path('framework/cache/.no-vite-hot'));
+            return $vite;
         });
     }
 
     public function boot(): void
     {
-        ViteFacade::useHotFile('');
+        ViteFacade::useHotFile(storage_path('framework/cache/.no-vite-hot'));
 
         if (app()->environment('production')) {
             URL::forceScheme('https');
