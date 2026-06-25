@@ -12,6 +12,10 @@ use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\StrukturController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok'], 200);
+});
+
 Route::get('/_debug', function () {
     $paths = [
         public_path('build/manifest.json'),
